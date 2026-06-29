@@ -27,7 +27,7 @@ RUN \
     && pip install -r /tmp/requirements.txt \
     \
     && cd /usr/lib/python3.12/site-packages/ \
-    && patch -p1 < /patches/force_recompile.patch \
+    && (patch -p1 < /patches/force_recompile.patch || true) \
     \
     && find /usr \
         \( -type d -a -name test -o -name tests -o -name '__pycache__' \) \

@@ -13,3 +13,4 @@ http:
 admin:
 api:
 hadashboard:
+  compile_on_start: true
