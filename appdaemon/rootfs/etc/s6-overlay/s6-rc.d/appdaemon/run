@@ -5,6 +5,9 @@
 # Runs the AppDaemon
 # ==============================================================================
 declare log_level
+declare debug_port
+declare -a appdaemon_cmd
+declare -a debug_cmd
 
 bashio::log.info "Starting AppDaemon..."
 
@@ -31,4 +34,18 @@ if bashio::config.has_value 'log_level'; then
 fi
 
 # Run the AppDaemon
-exec appdaemon -c /config -D "${log_level}"
+appdaemon_cmd=(appdaemon -c /config -D "${log_level}")
+
+if bashio::config.true 'debug_enabled'; then
+    debug_port="$(bashio::config 'debug_port')"
+    debug_cmd=(python3 -m debugpy --listen "0.0.0.0:${debug_port}")
+
+    if bashio::config.true 'debug_wait'; then
+        debug_cmd+=(--wait-for-client)
+    fi
+
+    bashio::log.warning "Remote debugging enabled on port ${debug_port}"
+    exec "${debug_cmd[@]}" "${appdaemon_cmd[@]}"
+fi
+
+exec "${appdaemon_cmd[@]}"

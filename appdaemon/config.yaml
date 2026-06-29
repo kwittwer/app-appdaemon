@@ -13,8 +13,10 @@ homeassistant_api: true
 uart: true
 ports:
   5050/tcp: 5050
+  5678/tcp: 5678
 ports_description:
   5050/tcp: AppDaemon
+  5678/tcp: Python debugger (debugpy)
 map:
   - addon_config:rw
   - homeassistant_config:rw
@@ -22,11 +24,17 @@ map:
   - share:rw
   - ssl
 options:
+  debug_enabled: false
+  debug_port: 5678
+  debug_wait: false
   system_packages: []
   python_packages: []
   init_commands: []
 schema:
   log_level: list(trace|debug|info|notice|warning|error|fatal)?
+  debug_enabled: bool?
+  debug_port: int(1024,65535)?
+  debug_wait: bool?
   system_packages:
     - str
   python_packages:

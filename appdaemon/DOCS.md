@@ -36,6 +36,9 @@ Example app configuration:
 
 ```yaml
 log_level: info
+debug_enabled: false
+debug_port: 5678
+debug_wait: false
 system_packages:
   - ffmpeg
 python_packages:
@@ -73,6 +76,27 @@ installed to your AppDaemon setup (e.g., `g++`. `make`, `ffmpeg`).
 **Note**: _Adding many packages will result in a longer start-up time
 for the app._
 
+### Option: `debug_enabled`
+
+Enables remote Python debugging for AppDaemon using `debugpy`.
+
+When this option is enabled, the add-on starts AppDaemon through the Python
+debug adapter and listens for an external debugger attach.
+
+By default, this option is `false`.
+
+### Option: `debug_port`
+
+The TCP port used for remote debugging when `debug_enabled` is enabled.
+The default value is `5678`.
+
+### Option: `debug_wait`
+
+If enabled, AppDaemon startup waits until a debugger client attaches.
+This is useful for debugging startup behavior.
+
+By default, this option is `false`.
+
 ### Option: `python_packages`
 
 Allows you to specify additional [Python packages][python-packages] to be
@@ -86,6 +110,43 @@ for the app._
 Customize your environment even more with the `init_commands` option.
 Add one or more shell commands to the list, and they will be executed every
 single time this app starts.
+
+## Remote debugging
+
+To use remote debugging:
+
+1. Set `debug_enabled` to `true` in the add-on options.
+1. Optionally change `debug_port` and `debug_wait`.
+1. Restart the add-on.
+1. Attach your IDE debugger to the Home Assistant host IP and debug port.
+
+Example Visual Studio Code attach configuration:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach AppDaemon",
+      "type": "python",
+      "request": "attach",
+      "connect": {
+        "host": "YOUR_HOME_ASSISTANT_IP",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "/config"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Security note: Remote debugging allows code execution through the debugger.
+Only enable debugging in trusted networks and disable it when not in use.
 
 ## AppDaemon and HADashboard configuration
 

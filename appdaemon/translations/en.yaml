@@ -4,6 +4,18 @@ configuration:
     name: Log level
     description: >-
       Controls the level of log details the app provides.
+  debug_enabled:
+    name: Enable remote debugging
+    description: >-
+      Enables remote Python debugging through debugpy.
+  debug_port:
+    name: Debug port
+    description: >-
+      TCP port used for remote debugging connections.
+  debug_wait:
+    name: Wait for debugger on startup
+    description: >-
+      Delays AppDaemon startup until a debugger client attaches.
   system_packages:
     name: System packages
     description: >-
@@ -21,3 +33,4 @@ configuration:
       before AppDaemon starts.
 network:
   5050/tcp: The AppDaemon webserver
+  5678/tcp: Python remote debugger (debugpy)
