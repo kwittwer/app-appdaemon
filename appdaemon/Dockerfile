@@ -15,14 +15,14 @@ COPY rootfs/patches /patches
 # hadolint ignore=DL3003,DL3042
 RUN \
     apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        python3-dev=3.12.13-r0 \
+        build-base \
+        python3-dev \
     \
     && apk add --no-cache \
-        py3-pip=25.1.1-r1 \
-        py3-wheel=0.46.3-r0 \
-        python3=3.12.13-r0 \
-        yq-go=4.49.2-r5 \
+        py3-pip \
+        py3-wheel \
+        python3 \
+        yq-go \
     \
     && pip install -r /tmp/requirements.txt \
     \
